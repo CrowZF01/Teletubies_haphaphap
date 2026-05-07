@@ -5,27 +5,22 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <HBox prefHeight="700.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.homeController">
     <children>
 
-        <!-- ==================== KOLOM 1: SIDEBAR KIRI ==================== -->
         <VBox prefWidth="220.0" style="-fx-background-color: #FFFFFF;" HBox.hgrow="NEVER">
             <padding>
                 <Insets bottom="30.0" left="25.0" right="25.0" top="30.0" />
             </padding>
             <children>
-                <!-- Logo -->
                 <Label text="HapHapHap" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #A65021;" />
 
-                <!-- Menu Navigasi -->
                 <VBox spacing="20.0" style="-fx-margin-top: 40px;">
                     <VBox.margin>
                         <Insets top="40.0" />
@@ -35,16 +30,13 @@
                         <Label style="-fx-cursor: hand; -fx-font-size: 13px; -fx-text-fill: #555555;" text="🥞  Sarapan" />
                         <Label style="-fx-cursor: hand; -fx-font-size: 13px; -fx-text-fill: #555555;" text="🍦  Dessert" />
                         <Label style="-fx-cursor: hand; -fx-font-size: 13px; -fx-text-fill: #555555;" text="☕  Minuman" />
-                        <Region prefHeight="15.0" /> <!-- Jarak Spasi -->
-                        <Label style="-fx-cursor: hand; -fx-font-size: 13px; -fx-text-fill: #555555;" text="♡  Favorit" />
+                        <Region prefHeight="15.0" /> <Label style="-fx-cursor: hand; -fx-font-size: 13px; -fx-text-fill: #555555;" text="♡  Favorit" />
                         <Label style="-fx-cursor: hand; -fx-font-size: 13px; -fx-text-fill: #555555;" text="📖  My Recipes" />
                     </children>
                 </VBox>
 
-                <!-- Spacer (Pendorong ke Bawah) -->
                 <Region VBox.vgrow="ALWAYS" />
 
-                <!-- Tombol Bawah -->
                 <VBox spacing="15.0">
                     <children>
                         <Button maxWidth="Infinity" style="-fx-background-color: #A65021; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 10; -fx-cursor: hand;" text="+ Add Recipe" />
@@ -55,14 +47,12 @@
         </VBox>
 
 
-        <!-- ==================== KOLOM 2: KONTEN TENGAH ==================== -->
         <VBox style="-fx-background-color: #F5F5F5;" HBox.hgrow="ALWAYS">
             <padding>
                 <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
             </padding>
             <children>
 
-                <!-- Search Bar -->
                 <HBox alignment="CENTER_LEFT" style="-fx-background-color: #EBEBEB; -fx-background-radius: 8; -fx-padding: 0 15;">
                     <children>
                         <Label text="🔍" textFill="#888888" />
@@ -70,64 +60,15 @@
                     </children>
                 </HBox>
 
-                <!-- Title -->
                 <Label text="Temukan Resep" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #333333;">
                     <VBox.margin>
                         <Insets bottom="20.0" top="30.0" />
                     </VBox.margin>
                 </Label>
 
-                <!-- Tempat Munculnya Card Resep -->
                 <ScrollPane fitToWidth="true" style="-fx-background: #F5F5F5; -fx-background-color: transparent; -fx-border-color: transparent;" VBox.vgrow="ALWAYS">
                     <content>
-                        <!-- INI resepContainer (FLOWPANE) -->
                         <FlowPane fx:id="resepContainer" hgap="20.0" vgap="20.0" style="-fx-padding: 5;">
-                            <children>
-
-                                <!-- ==================== CONTOH CARD RESEP ==================== -->
-                                <VBox prefWidth="250.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, #d0d0d0, 10, 0, 0, 5);">
-                                    <children>
-                                        <!-- Gambar (Placeholder Kotak Abu-abu) -->
-                                        <StackPane prefHeight="150.0" style="-fx-background-color: #E0E0E0; -fx-background-radius: 10 10 0 0;">
-                                            <children>
-                                                <Label text="♡" textFill="WHITE" style="-fx-font-size: 18px; -fx-cursor: hand;" StackPane.alignment="TOP_RIGHT">
-                                                    <StackPane.margin>
-                                                        <Insets right="10.0" top="5.0" />
-                                                    </StackPane.margin>
-                                                </Label>
-                                            </children>
-                                        </StackPane>
-
-                                        <!-- Info Teks Resep -->
-                                        <VBox spacing="8.0">
-                                            <padding>
-                                                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-                                            </padding>
-                                            <children>
-                                                <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                                    <children>
-                                                        <Label text="Summer Caprese Salad" style="-fx-font-size: 14px; -fx-font-weight: bold;" wrapText="true" HBox.hgrow="ALWAYS" />
-                                                        <Label text="SARAPAN" style="-fx-background-color: #FBE2D1; -fx-text-fill: #A65021; -fx-font-size: 9px; -fx-font-weight: bold; -fx-padding: 3 6; -fx-background-radius: 4;" />
-                                                    </children>
-                                                </HBox>
-                                                <Label text="A refreshing and simple salad featuring ripe tomatoes, fresh mozzarella, and..." textFill="#777777" wrapText="true" style="-fx-font-size: 11px; -fx-line-spacing: 2px;" />
-
-                                                <HBox spacing="15.0" style="-fx-margin-top: 5px;">
-                                                    <children>
-                                                        <Label text="⏱ 15m" textFill="#888888" style="-fx-font-size: 11px;" />
-                                                        <Label text="🍽 8 Porsi" textFill="#888888" style="-fx-font-size: 11px;" />
-                                                    </children>
-                                                    <VBox.margin>
-                                                        <Insets top="5.0" />
-                                                    </VBox.margin>
-                                                </HBox>
-                                            </children>
-                                        </VBox>
-                                    </children>
-                                </VBox>
-                                <!-- ================== END CARD RESEP ================== -->
-
-                            </children>
                         </FlowPane>
                     </content>
                 </ScrollPane>
@@ -135,7 +76,6 @@
         </VBox>
 
 
-        <!-- ==================== KOLOM 3: FILTER KANAN ==================== -->
         <VBox prefWidth="260.0" style="-fx-background-color: #FFFFFF;" HBox.hgrow="NEVER">
             <padding>
                 <Insets bottom="30.0" left="25.0" right="25.0" top="30.0" />
@@ -150,32 +90,26 @@
                     <children>
                         <Label text="Include Ingredients" textFill="#888888" style="-fx-font-size: 11px;" />
 
-                        <!-- Input Tambah Bahan -->
                         <HBox alignment="CENTER" style="-fx-background-color: #F5F5F5; -fx-background-radius: 6; -fx-padding: 0 10;">
                             <children>
-                                <TextField promptText="e.g. Garlic, Chicken" style="-fx-background-color: transparent; -fx-border-width: 0; -fx-font-size: 12px; -fx-padding: 10 5;" HBox.hgrow="ALWAYS" />
-                                <Button style="-fx-background-color: transparent; -fx-text-fill: #A65021; -fx-font-weight: bold; -fx-font-size: 16px; -fx-cursor: hand;" text="⊕" />
+                                <TextField fx:id="inputBahanField" onAction="#handleTambahBahan" promptText="e.g. Nasi, Ayam" style="-fx-background-color: transparent; -fx-border-width: 0; -fx-font-size: 12px; -fx-padding: 10 5;" HBox.hgrow="ALWAYS" />
+                                <Button onAction="#handleTambahBahan" style="-fx-background-color: transparent; -fx-text-fill: #A65021; -fx-font-weight: bold; -fx-font-size: 16px; -fx-cursor: hand;" text="⊕" />
                             </children>
                         </HBox>
 
-                        <!-- Tag Bahan Terpilih -->
-                        <FlowPane hgap="8.0" vgap="8.0">
+                        <FlowPane fx:id="tagContainer" hgap="8.0" vgap="8.0">
                             <VBox.margin>
                                 <Insets top="10.0" />
                             </VBox.margin>
                             <children>
-                                <Label text="Tomato  ✕" style="-fx-background-color: #FBE2D1; -fx-text-fill: #555555; -fx-font-size: 11px; -fx-padding: 5 8; -fx-background-radius: 4; -fx-cursor: hand;" />
-                                <Label text="Basil  ✕" style="-fx-background-color: #FBE2D1; -fx-text-fill: #555555; -fx-font-size: 11px; -fx-padding: 5 8; -fx-background-radius: 4; -fx-cursor: hand;" />
-                                <Label text="Mozzarella  ✕" style="-fx-background-color: #EEEEEE; -fx-text-fill: #555555; -fx-font-size: 11px; -fx-padding: 5 8; -fx-background-radius: 4; -fx-cursor: hand;" />
                             </children>
                         </FlowPane>
                     </children>
                 </VBox>
 
-                <!-- Spacer -->
                 <Region VBox.vgrow="ALWAYS" />
 
-                <Button maxWidth="Infinity" style="-fx-background-color: #A65021; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 10; -fx-cursor: hand;" text="Terapkan Filter" />
+                <Button maxWidth="Infinity" onAction="#handleTerapkanFilter" style="-fx-background-color: #A65021; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 10; -fx-cursor: hand;" text="Terapkan Filter" />
             </children>
         </VBox>
 

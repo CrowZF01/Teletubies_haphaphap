@@ -73,17 +73,28 @@ public class resepDB {
         return list;
     }
 
-    public List<Resep> filterBerdasarkanBahan(String bahan) {
+    // Ubah parameter agar menerima List<String>
+    public List<Resep> filterBerdasarkanBahan(List<String> bahanList) {
         List<Resep> list = new ArrayList<>();
-        // Pakai HAVING karena kita nyari dari daftar bahan yang udah digabungin (GROUP_CONCAT)
-        String sql = BASE_QUERY + "GROUP BY r.id_resep HAVING daftar_bahan LIKE ?";
+
+        // Kita gunakan StringBuilder untuk merangkai query secara otomatis
+        StringBuilder sqlBuilder = new StringBuilder(BASE_QUERY);
+        sqlBuilder.append("GROUP BY r.id_resep HAVING 1=1 "); // 1=1 sekadar trik agar bisa ditambah AND berulang kali
+
+        // Tambahkan kondisi AND sebanyak jumlah bahan di list
+        for (int i = 0; i < bahanList.size(); i++) {
+            sqlBuilder.append("AND daftar_bahan LIKE ? ");
+        }
 
         try (Connection conn = databaseUtil.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sqlBuilder.toString())) {
 
-            stmt.setString(1, "%" + bahan + "%");
+            // Masukkan kata kuncinya ke tanda tanya (?) di SQL
+            for (int i = 0; i < bahanList.size(); i++) {
+                stmt.setString(i + 1, "%" + bahanList.get(i) + "%");
+            }
+
             ResultSet rs = stmt.executeQuery();
-
             while (rs.next()) {
                 list.add(mapToResep(rs));
             }
