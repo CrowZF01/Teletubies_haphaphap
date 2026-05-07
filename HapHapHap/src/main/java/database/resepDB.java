@@ -77,13 +77,15 @@ public class resepDB {
     public List<Resep> filterBerdasarkanBahan(List<String> bahanList) {
         List<Resep> list = new ArrayList<>();
 
-        // Kita gunakan StringBuilder untuk merangkai query secara otomatis
         StringBuilder sqlBuilder = new StringBuilder(BASE_QUERY);
-        sqlBuilder.append("GROUP BY r.id_resep HAVING 1=1 "); // 1=1 sekadar trik agar bisa ditambah AND berulang kali
+        sqlBuilder.append("GROUP BY r.id_resep HAVING "); // 1=1 sekadar trik agar bisa ditambah AND berulang kali
 
         // Tambahkan kondisi AND sebanyak jumlah bahan di list
         for (int i = 0; i < bahanList.size(); i++) {
-            sqlBuilder.append("AND daftar_bahan LIKE ? ");
+            if (i > 0) {
+                sqlBuilder.append(" AND "); // Tambahkan AND hanya jika ini bukan bahan pertama
+            }
+            sqlBuilder.append("daftar_bahan LIKE ?");
         }
 
         try (Connection conn = databaseUtil.getConnection();
