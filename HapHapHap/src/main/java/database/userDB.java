@@ -23,7 +23,7 @@ public class userDB {
 
             if (rs.next()) {
                 return new User(
-                        rs.getInt("id"),
+                        rs.getInt("id_user"),
                         rs.getString("username"),
                         rs.getString("password")
                 );

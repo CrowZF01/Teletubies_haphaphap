@@ -9,150 +9,127 @@ import java.util.List;
 
 public class resepDB {
 
+    // Query sakti untuk menggabungkan tabel Resep, Kategori, dan Bahan jadi satu
+    private final String BASE_QUERY =
+            "SELECT r.id_resep, r.nama_resep, k.nama_kategori, r.tingkat_kepedasan, " +
+                    "GROUP_CONCAT(b.nama_bahan SEPARATOR ', ') AS daftar_bahan, " +
+                    "r.langkah_pembuatan, r.waktu_estimasi " +
+                    "FROM Resep r " +
+                    "LEFT JOIN Kategori k ON r.id_kategori = k.id_kategori " +
+                    "LEFT JOIN Resep_Bahan rb ON r.id_resep = rb.id_resep " +
+                    "LEFT JOIN Bahan b ON rb.id_bahan = b.id_bahan ";
+
     public List<Resep> getAllResep() {
         List<Resep> list = new ArrayList<>();
-
-        String sql = "SELECT * FROM resep";
+        String sql = BASE_QUERY + "GROUP BY r.id_resep";
 
         try (Connection conn = databaseUtil.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                Resep resep = new Resep(
-                        rs.getInt("id_resep"),
-                        rs.getString("judul"),
-                        rs.getString("jenis_makanan"),
-                        rs.getInt("tingkat_kepedasan"),
-                        rs.getString("bahan"),
-                        rs.getString("langkah_pembuatan"),
-                        rs.getInt("estimasi_waktu")
-                );
-
-                list.add(resep);
+                list.add(mapToResep(rs));
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return list;
     }
 
-    public boolean tambahResep(Resep resep) {
-        String sql = "INSERT INTO resep (judul, jenis_makanan, tingkat_kepedasan, bahan, langkah_pembuatan, estimasi_waktu) VALUES (?, ?, ?, ?, ?, ?)";
+    public Resep getResepById(int idResep) {
+        String sql = BASE_QUERY + "WHERE r.id_resep = ? GROUP BY r.id_resep";
 
         try (Connection conn = databaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, resep.getJudul());
-            stmt.setString(2, resep.getJenisMakanan());
-            stmt.setInt(3, resep.getTingkatKepedasan());
-            stmt.setString(4, resep.getBahan());
-            stmt.setString(5, resep.getLangkahPembuatan());
-            stmt.setInt(6, resep.getEstimasiWaktu());
+            stmt.setInt(1, idResep);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return mapToResep(rs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Resep> cariBerdasarkanNama(String nama) {
+        List<Resep> list = new ArrayList<>();
+        String sql = BASE_QUERY + "WHERE r.nama_resep LIKE ? GROUP BY r.id_resep";
+
+        try (Connection conn = databaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, "%" + nama + "%");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                list.add(mapToResep(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<Resep> filterBerdasarkanBahan(String bahan) {
+        List<Resep> list = new ArrayList<>();
+        // Pakai HAVING karena kita nyari dari daftar bahan yang udah digabungin (GROUP_CONCAT)
+        String sql = BASE_QUERY + "GROUP BY r.id_resep HAVING daftar_bahan LIKE ?";
+
+        try (Connection conn = databaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, "%" + bahan + "%");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                list.add(mapToResep(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public boolean tambahResep(Resep resep) {
+        // KODE SEMENTARA: Cuma nge-insert ke tabel Resep (bahan belum ikut ter-insert).
+        // Default id_user = 2 (akun felix), id_kategori = 1
+        String sql = "INSERT INTO Resep (id_user, id_kategori, nama_resep, langkah_pembuatan, waktu_estimasi, tingkat_kepedasan) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = databaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, 2);
+            stmt.setInt(2, 1);
+            stmt.setString(3, resep.getJudul());
+            stmt.setString(4, resep.getLangkahPembuatan());
+            stmt.setInt(5, resep.getEstimasiWaktu());
+            stmt.setInt(6, resep.getTingkatKepedasan());
 
             return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return false;
     }
 
-    public Resep getResepById(int idResep) {
-        String sql = "SELECT * FROM resep WHERE id_resep = ?";
+    // Method bantuan biar nggak ngetik panjang-panjang terus
+    private Resep mapToResep(ResultSet rs) throws SQLException {
+        String bahan = rs.getString("daftar_bahan");
+        if (bahan == null) bahan = ""; // Jaga-jaga kalau ada resep yang belum diinput bahannya
 
-        try (Connection conn = databaseUtil.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, idResep);
-
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return new Resep(
-                        rs.getInt("id_resep"),
-                        rs.getString("judul"),
-                        rs.getString("jenis_makanan"),
-                        rs.getInt("tingkat_kepedasan"),
-                        rs.getString("bahan"),
-                        rs.getString("langkah_pembuatan"),
-                        rs.getInt("estimasi_waktu")
-                );
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    public List<Resep> cariBerdasarkanNama(String nama) {
-        List<Resep> list = new ArrayList<>();
-
-        String sql = "SELECT * FROM resep WHERE judul LIKE ?";
-
-        try (Connection conn = databaseUtil.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, "%" + nama + "%");
-
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                Resep resep = new Resep(
-                        rs.getInt("id_resep"),
-                        rs.getString("judul"),
-                        rs.getString("jenis_makanan"),
-                        rs.getInt("tingkat_kepedasan"),
-                        rs.getString("bahan"),
-                        rs.getString("langkah_pembuatan"),
-                        rs.getInt("estimasi_waktu")
-                );
-
-                list.add(resep);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return list;
-    }
-
-    public List<Resep> filterBerdasarkanBahan(String bahan) {
-        List<Resep> list = new ArrayList<>();
-
-        String sql = "SELECT * FROM resep WHERE bahan LIKE ?";
-
-        try (Connection conn = databaseUtil.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, "%" + bahan + "%");
-
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                Resep resep = new Resep(
-                        rs.getInt("id_resep"),
-                        rs.getString("judul"),
-                        rs.getString("jenis_makanan"),
-                        rs.getInt("tingkat_kepedasan"),
-                        rs.getString("bahan"),
-                        rs.getString("langkah_pembuatan"),
-                        rs.getInt("estimasi_waktu")
-                );
-
-                list.add(resep);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return list;
+        return new Resep(
+                rs.getInt("id_resep"),
+                rs.getString("nama_resep"),
+                rs.getString("nama_kategori"),
+                rs.getInt("tingkat_kepedasan"),
+                bahan,
+                rs.getString("langkah_pembuatan"),
+                rs.getInt("waktu_estimasi")
+        );
     }
 }
