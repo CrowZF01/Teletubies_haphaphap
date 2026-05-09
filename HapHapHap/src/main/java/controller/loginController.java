@@ -55,4 +55,22 @@ public class loginController {
             System.out.println("Login gagal: Username atau Password salah");
         }
     }
+
+    @FXML
+    public void pindahDaftar(){
+        try {
+            Stage stage = (Stage) usernameField.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/felix_71241153/app/haphaphap/daftar.fxml"));
+            Parent root = loader.load();
+
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }catch (Exception e){
+            System.out.println("Gagal memuat halaman Daftar");
+            e.printStackTrace();
+        }
+
+
+    }
 }
