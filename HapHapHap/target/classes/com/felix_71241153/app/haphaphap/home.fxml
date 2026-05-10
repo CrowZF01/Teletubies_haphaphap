@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<HBox prefHeight="700.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.homeController">
+<HBox prefHeight="700.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.homeController">
     <children>
 
         <VBox prefWidth="220.0" style="-fx-background-color: #FFFFFF;" HBox.hgrow="NEVER">
@@ -19,18 +12,20 @@
                 <Insets bottom="30.0" left="25.0" right="25.0" top="30.0" />
             </padding>
             <children>
-                <Label text="HapHapHap" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #A65021;" />
+                <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #A65021;" text="HapHapHap" />
 
                 <VBox spacing="20.0" style="-fx-margin-top: 40px;">
                     <VBox.margin>
                         <Insets top="40.0" />
                     </VBox.margin>
                     <children>
-                        <Label style="-fx-cursor: hand; -fx-font-size: 13px; -fx-text-fill: #555555; -fx-font-weight: bold;" text="🍴  Semua Resep" />
-                        <Label style="-fx-cursor: hand; -fx-font-size: 13px; -fx-text-fill: #555555;" text="🥞  Sarapan" />
-                        <Label style="-fx-cursor: hand; -fx-font-size: 13px; -fx-text-fill: #555555;" text="🍦  Dessert" />
-                        <Label style="-fx-cursor: hand; -fx-font-size: 13px; -fx-text-fill: #555555;" text="☕  Minuman" />
-                        <Region prefHeight="15.0" /> <Label style="-fx-cursor: hand; -fx-font-size: 13px; -fx-text-fill: #555555;" text="♡  Favorit" />
+                        <Label onMouseClicked="#kategoriSemua" style="-fx-cursor: hand; -fx-font-size: 13px; -fx-text-fill: #555555; -fx-font-weight: bold;" text="🍴  Semua Resep" />
+                        <Label onMouseClicked="#kategoriMakanan" style="-fx-cursor: hand; -fx-font-size: 13px; -fx-text-fill: #555555;" text="🥞  Sarapan" />
+                        <Label onMouseClicked="#kategoriDessert" style="-fx-cursor: hand; -fx-font-size: 13px; -fx-text-fill: #555555;" text="🍦  Dessert" />
+                        <Label onMouseClicked="#kategoriMinuman" style="-fx-cursor: hand; -fx-font-size: 13px; -fx-text-fill: #555555;" text="☕  Minuman" />
+
+                        <Region prefHeight="15.0" />
+                        <Label style="-fx-cursor: hand; -fx-font-size: 13px; -fx-text-fill: #555555;" text="♡  Favorit" />
                         <Label style="-fx-cursor: hand; -fx-font-size: 13px; -fx-text-fill: #555555;" text="📖  My Recipes" />
                     </children>
                 </VBox>
@@ -40,7 +35,7 @@
                 <VBox spacing="15.0">
                     <children>
                         <Button maxWidth="Infinity" style="-fx-background-color: #A65021; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 10; -fx-cursor: hand;" text="+ Add Recipe" />
-                        <Button style="-fx-background-color: transparent; -fx-text-fill: #555555; -fx-cursor: hand;" text="🚪 Logout" />
+                        <Button onAction="#handleLogout" style="-fx-background-color: transparent; -fx-text-fill: #555555; -fx-cursor: hand;" text="🚪 Logout" />
                     </children>
                 </VBox>
             </children>
@@ -53,14 +48,14 @@
             </padding>
             <children>
 
-                <HBox alignment="CENTER_LEFT" style="-fx-background-color: #EBEBEB; -fx-background-radius: 8; -fx-padding: 0 15;">
+                <HBox alignment="CENTER_LEFT" style="-fx-background-color: #EBEBEB; -fx-background-radius: 8; -fx-padding: 0 5;">
                     <children>
-                        <Label text="🔍" textFill="#888888" />
-                        <TextField promptText="Search recipes..." style="-fx-background-color: transparent; -fx-border-width: 0; -fx-padding: 12; -fx-font-size: 13px;" HBox.hgrow="ALWAYS" />
+                        <Button onAction="#handleCariResep" style="-fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 14px;" text="🔍" textFill="#888888" />
+                        <TextField fx:id="searchField" onAction="#handleCariResep" promptText="Search recipes..." style="-fx-background-color: transparent; -fx-border-width: 0; -fx-padding: 12; -fx-font-size: 13px;" HBox.hgrow="ALWAYS" />
                     </children>
                 </HBox>
 
-                <Label text="Temukan Resep" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #333333;">
+                <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Temukan Resep">
                     <VBox.margin>
                         <Insets bottom="20.0" top="30.0" />
                     </VBox.margin>
@@ -68,7 +63,7 @@
 
                 <ScrollPane fitToWidth="true" style="-fx-background: #F5F5F5; -fx-background-color: transparent; -fx-border-color: transparent;" VBox.vgrow="ALWAYS">
                     <content>
-                        <FlowPane fx:id="resepContainer" hgap="20.0" vgap="20.0" style="-fx-padding: 5;">
+                        <FlowPane fx:id="resepContainer" hgap="20.0" style="-fx-padding: 5;" vgap="20.0">
                         </FlowPane>
                     </content>
                 </ScrollPane>
@@ -81,14 +76,14 @@
                 <Insets bottom="30.0" left="25.0" right="25.0" top="30.0" />
             </padding>
             <children>
-                <Label text="Filter Dapur" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;" />
+                <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Filter Dapur" />
 
                 <VBox spacing="10.0">
                     <VBox.margin>
                         <Insets top="30.0" />
                     </VBox.margin>
                     <children>
-                        <Label text="Include Ingredients" textFill="#888888" style="-fx-font-size: 11px;" />
+                        <Label style="-fx-font-size: 11px;" text="Include Ingredients" textFill="#888888" />
 
                         <HBox alignment="CENTER" style="-fx-background-color: #F5F5F5; -fx-background-radius: 6; -fx-padding: 0 10;">
                             <children>

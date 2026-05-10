@@ -12,12 +12,8 @@
     <children>
         <VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-
-                <!-- Card Container Putih di Tengah -->
                 <VBox maxWidth="380.0" spacing="25.0" style="-fx-background-color: #FFFFFF; -fx-padding: 40; -fx-background-radius: 12; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 15, 0, 0, 5);">
                     <children>
-
-                        <!-- Header Title & Subtitle -->
                         <VBox spacing="8.0">
                             <children>
                                 <Label style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #222222; -fx-line-spacing: -5px;" text="Selamat Datang&#10;Di Haphaphap" wrapText="true" />
@@ -25,18 +21,14 @@
                             </children>
                         </VBox>
 
-                        <!-- Input Fields Container -->
                         <VBox spacing="15.0">
                             <children>
-                                <!-- USERNAME -->
                                 <VBox spacing="6.0">
                                     <children>
                                         <Label style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #444444;" text="Username" />
                                         <TextField fx:id="usernameField" promptText="Masukkan username Anda" style="-fx-background-color: #F0F0F0; -fx-background-radius: 6; -fx-padding: 10 12; -fx-prompt-text-fill: #AAAAAA; -fx-font-size: 13px; -fx-border-width: 0;" />
                                     </children>
                                 </VBox>
-
-                                <!-- PASSWORD -->
                                 <VBox spacing="6.0">
                                     <children>
                                         <Label style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #444444;" text="Kata Sandi" />
@@ -51,12 +43,9 @@
                         </VBox>
                             </children>
                         </VBox>
-
-                        <!-- Buttons Container -->
                         <VBox spacing="10.0">
                             <children>
                                 <Label fx:id="statusLabel" alignment="CENTER" maxWidth="Infinity" style="-fx-font-size: 13px; -fx-font-weight: bold;" text="" />
-                                <!-- BUTTON LOGIN -->
                                 <Button maxWidth="Infinity" onAction="#handleDaftar" style="-fx-background-color: #A0522D; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 10; -fx-cursor: hand; -fx-font-size: 13px;" text="Daftar" />
                             </children>
                             <VBox.margin>

@@ -145,4 +145,22 @@ public class resepDB {
                 rs.getString("foto") // <--- MASUKKAN KE SINI
         );
     }
+
+    // Method khusus untuk filter kategori dari sidebar kiri
+    public List<Resep> filterBerdasarkanKategori(String kategori) {
+        List<Resep> list = new ArrayList<>();
+        // Kita pakai klausa WHERE pada k.nama_kategori
+        String sql = BASE_QUERY + "WHERE k.nama_kategori = ? GROUP BY r.id_resep";
+        try (Connection conn = databaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, kategori);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                list.add(mapToResep(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

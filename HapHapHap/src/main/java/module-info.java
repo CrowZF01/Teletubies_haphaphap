@@ -6,6 +6,7 @@ module com.felix_71241153.app.haphaphap {
     requires com.dlsc.formsfx;
     requires org.kordamp.bootstrapfx.core;
     requires java.sql;
+    requires java.desktop;
 
     opens com.felix_71241153.app.haphaphap to javafx.fxml;
 
