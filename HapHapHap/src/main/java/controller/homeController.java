@@ -1,6 +1,7 @@
 package controller;
 
 import database.resepDB;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -8,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -127,6 +129,12 @@ public class homeController {
                 VBox card = loader.load();
                 itemResepController controller = loader.getController();
                 controller.setData(resep);
+                card.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        bukaHalamanDetail(resep, event);
+                    }
+                });
                 resepContainer.getChildren().add(card);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -149,6 +157,23 @@ public class homeController {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("❌ Gagal memuat halaman login.");
+        }
+    }
+
+    private void bukaHalamanDetail(Resep resep, MouseEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/felix_71241153/app/haphaphap/detail.fxml"));
+            Parent root = loader.load();
+            detailController controller = loader.getController();
+            controller.setResepData(resep);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (Exception e) {
+            System.out.println("Gagal membuka halaman detail!");
+            e.printStackTrace();
         }
     }
 }

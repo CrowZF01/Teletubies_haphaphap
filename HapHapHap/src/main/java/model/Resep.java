@@ -56,6 +56,7 @@ public class Resep {
         return estimasiWaktu;
     }
 
+
     public String getDetailResep() {
         return judul + "\n\nBahan:\n" + bahan + "\n\nLangkah:\n" + langkahPembuatan;
     }

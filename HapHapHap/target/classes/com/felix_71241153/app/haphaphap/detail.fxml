@@ -10,89 +10,71 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="700.0" prefWidth="1100.0" style="-fx-background-color: #F5F5F5;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.detailController">
-    <padding>
-        <Insets bottom="40.0" left="50.0" right="50.0" top="40.0" />
-    </padding>
-    <children>
-
-        <HBox alignment="CENTER_LEFT" spacing="20.0">
-            <children>
-                <Label onMouseClicked="#handleKembali" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #A65021; -fx-cursor: hand;" text="⬅ Kembali ke Home" />
-
-                <Region HBox.hgrow="ALWAYS" />
-
-                <Label fx:id="kategoriLabel" style="-fx-background-color: #FBE2D1; -fx-text-fill: #A65021; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 5 10; -fx-background-radius: 6;" text="KATEGORI" />
-                <Label fx:id="waktuLabel" style="-fx-font-size: 14px; -fx-text-fill: #888888;" text="⏱ 0m" />
-                <Label fx:id="pedasLabel" style="-fx-font-size: 14px; -fx-text-fill: #888888;" text="🌶 Level 0" />
-            </children>
-        </HBox>
-
-        <Label fx:id="judulResep" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Nama Resep Akan Muncul Di Sini" wrapText="true">
-            <VBox.margin>
-                <Insets bottom="30.0" top="20.0" />
-            </VBox.margin>
-        </Label>
-
-        <HBox spacing="40.0" VBox.vgrow="ALWAYS">
+<ScrollPane fitToWidth="true" prefHeight="700.0" prefWidth="1100.0" style="-fx-background-color: #F5F5F5;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.detailController">
+    <content>
+        <VBox style="-fx-background-color: #F5F5F5;">
+            <padding>
+                <Insets bottom="40.0" left="50.0" right="50.0" top="40.0" />
+            </padding>
             <children>
 
-                <VBox prefWidth="350.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 5);">
-                    <padding>
-                        <Insets bottom="30.0" left="25.0" right="25.0" top="30.0" />
-                    </padding>
+                <HBox alignment="CENTER_LEFT" spacing="20.0">
                     <children>
-                        <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #A65021;" text="Daftar Bahan" />
-
-                        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: white; -fx-border-color: transparent;" VBox.vgrow="ALWAYS">
-                            <VBox.margin>
-                                <Insets top="15.0" />
-                            </VBox.margin>
-                            <content>
-                                <Label fx:id="bahanResep" style="-fx-font-size: 14px; -fx-text-fill: #555555; -fx-line-spacing: 8px;" text="Memuat daftar bahan..." wrapText="true" />
-                            </content>
-                        </ScrollPane>
-
-                        <Region VBox.vgrow="ALWAYS" />
-
-                        <Button maxWidth="Infinity" style="-fx-background-color: #A65021; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 12; -fx-cursor: hand;" text="♡ Simpan Favorit" />
+                        <Label onMouseClicked="#handleKembali" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #A65021; -fx-cursor: hand;" text="⬅ Kembali ke Home" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Label fx:id="kategoriLabel" style="-fx-background-color: #FBE2D1; -fx-text-fill: #A65021; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 5 10; -fx-background-radius: 6;" text="KATEGORI" />
+                        <Label fx:id="waktuLabel" style="-fx-font-size: 14px; -fx-text-fill: #888888;" text="⏱ 0m" />
+                        <Label fx:id="pedasLabel" style="-fx-font-size: 14px; -fx-text-fill: #888888;" text="🌶 Level 0" />
                     </children>
-                </VBox>
+                </HBox>
 
-                <VBox spacing="25.0" HBox.hgrow="ALWAYS">
+                <Label fx:id="judulResep" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Nama Resep Akan Muncul Di Sini" wrapText="true">
+                    <VBox.margin>
+                        <Insets bottom="30.0" top="20.0" />
+                    </VBox.margin>
+                </Label>
+
+                <HBox spacing="40.0">
                     <children>
-
-                        <StackPane style="-fx-background-color: #EBEBEB; -fx-background-radius: 15; -fx-padding: 15;">
-                            <children>
-                                <ImageView fx:id="fotoResepDetail" fitHeight="350.0" fitWidth="480.0" pickOnBounds="true" preserveRatio="true" />
-
-                                <Label fx:id="placeholderIcon" style="-fx-font-size: 40px; -fx-text-fill: #CCCCCC;" text="🍽" />
-                            </children>
-                        </StackPane>
-
-                        <VBox style="-fx-background-color: white; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 5);" VBox.vgrow="ALWAYS">
+                        <VBox prefWidth="350.0" spacing="15.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 5);">
                             <padding>
                                 <Insets bottom="30.0" left="25.0" right="25.0" top="30.0" />
                             </padding>
                             <children>
-                                <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #A65021;" text="Langkah Memasak" />
+                                <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #A65021;" text="Daftar Bahan" />
 
-                                <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: white; -fx-border-color: transparent;" VBox.vgrow="ALWAYS">
-                                    <VBox.margin>
-                                        <Insets top="15.0" />
-                                    </VBox.margin>
-                                    <content>
-                                        <Label fx:id="langkahResep" style="-fx-font-size: 14px; -fx-text-fill: #555555; -fx-line-spacing: 8px;" text="Memuat langkah pembuatan..." wrapText="true" />
-                                    </content>
-                                </ScrollPane>
+                                <Label fx:id="bahanResep" style="-fx-font-size: 14px; -fx-text-fill: #555555; -fx-line-spacing: 8px;" text="Memuat daftar bahan..." wrapText="true" />
+
+                                <Region VBox.vgrow="ALWAYS" />
+                                <Button maxWidth="Infinity" style="-fx-background-color: #A65021; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 12; -fx-cursor: hand;" text="♡ Simpan Favorit" />
                             </children>
                         </VBox>
 
+                        <VBox spacing="25.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <StackPane style="-fx-background-color: #EBEBEB; -fx-background-radius: 15; -fx-padding: 15;">
+                                    <children>
+                                        <ImageView fx:id="fotoResepDetail" fitHeight="350.0" fitWidth="480.0" pickOnBounds="true" preserveRatio="true" />
+                                        <Label fx:id="placeholderIcon" style="-fx-font-size: 40px; -fx-text-fill: #CCCCCC;" text="🍽" />
+                                    </children>
+                                </StackPane>
+
+                                <VBox style="-fx-background-color: white; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 5);">
+                                    <padding>
+                                        <Insets bottom="30.0" left="25.0" right="25.0" top="30.0" />
+                                    </padding>
+                                    <children>
+                                        <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #A65021;" text="Langkah Memasak" />
+
+                                        <Label fx:id="langkahResep" style="-fx-font-size: 14px; -fx-text-fill: #555555; -fx-line-spacing: 8px;" text="Memuat langkah pembuatan..." wrapText="true" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </VBox>
                     </children>
-                </VBox>
+                </HBox>
 
             </children>
-        </HBox>
-
-    </children>
-</VBox>
+        </VBox>
+    </content>
+</ScrollPane>

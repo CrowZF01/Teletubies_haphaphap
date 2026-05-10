@@ -1,5 +1,6 @@
 package database;
 
+import model.Bahan;
 import model.Resep;
 import util.databaseUtil;
 
@@ -157,6 +158,29 @@ public class resepDB {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 list.add(mapToResep(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<Bahan> getBahanByResep(int idResep) {
+        List<Bahan> list = new ArrayList<>();
+        String sql = """
+                SELECT bahan.id_bahan, resep_bahan.id_resep, bahan.nama_bahan FROM bahan 
+                JOIN resep_bahan ON bahan.id_bahan = resep_bahan.id_bahan 
+                WHERE resep_bahan.id_resep = ?""";
+        try (Connection conn = databaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idResep);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Bahan bahan = new Bahan();
+                bahan.setIdBahan(rs.getInt("id_bahan"));
+                bahan.setIdResep(rs.getInt("id_resep"));
+                bahan.setNamaBahan(rs.getString("nama_bahan"));
+                list.add(bahan);
             }
         } catch (SQLException e) {
             e.printStackTrace();
