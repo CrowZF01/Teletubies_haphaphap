@@ -20,7 +20,7 @@
                     </VBox.margin>
                     <children>
                         <Label onMouseClicked="#kategoriSemua" style="-fx-cursor: hand; -fx-font-size: 13px; -fx-text-fill: #555555; -fx-font-weight: bold;" text="🍴  Semua Resep" />
-                        <Label onMouseClicked="#kategoriMakanan" style="-fx-cursor: hand; -fx-font-size: 13px; -fx-text-fill: #555555;" text="🥞  Sarapan" />
+                        <Label onMouseClicked="#kategoriMakanan" style="-fx-cursor: hand; -fx-font-size: 13px; -fx-text-fill: #555555;" text="🥞  Makanan" />
                         <Label onMouseClicked="#kategoriDessert" style="-fx-cursor: hand; -fx-font-size: 13px; -fx-text-fill: #555555;" text="🍦  Dessert" />
                         <Label onMouseClicked="#kategoriMinuman" style="-fx-cursor: hand; -fx-font-size: 13px; -fx-text-fill: #555555;" text="☕  Minuman" />
 
