@@ -1,7 +1,7 @@
 package controller;
 
 import database.resepDB;
-import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -15,128 +15,186 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Resep;
 
-import javafx.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class homeController {
+
     @FXML private TextField inputBahanField;
     @FXML private FlowPane tagContainer;
     @FXML private FlowPane resepContainer;
     @FXML private TextField searchField;
 
-    private List<String> listBahanTerpilih = new java.util.ArrayList<>();
+    private final resepDB db = new resepDB();
 
-    // Saat aplikasi dibuka, langsung tampilkan semua resep
+    private final List<String> listBahanTerpilih = new ArrayList<>();
+    private final List<Resep> masterData = new ArrayList<>();
+
+    private String kategoriAktif = "Semua";
+
+    @FXML
     public void initialize() {
-        resepDB db = new resepDB();
-        List<Resep> listSemuaResep = db.getAllResep();
-        tampilkanKeLayar(listSemuaResep);
+        masterData.clear();
+        masterData.addAll(db.getAllResep());
+        tampilkanKeLayar(masterData);
+
+        // Search otomatis setiap diketik, lebih smooth seperti SiBarista
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            terapkanSemuaFilter();
+        });
     }
 
-    // Dipanggil otomatis setiap kali ada huruf yang diketik di Search Bar
     @FXML
     public void handleCariResep() {
-        String keyword = searchField.getText().trim();
-        resepDB db = new resepDB();
-        List<Resep> hasilPencarian;
-        // Jika kotak pencarian kosong, kembalikan tampilan ke semua resep
-        if (keyword.isEmpty()) {
-            hasilPencarian = db.getAllResep();
-        } else {
-            // Jika ada hurufnya, cari ke database berdasarkan nama
-            hasilPencarian = db.cariBerdasarkanNama(keyword);
-        }
-        // Panggil method helper andalan kita untuk memunculkannya ke layar!
-        tampilkanKeLayar(hasilPencarian);
+        terapkanSemuaFilter();
     }
 
     @FXML
     public void kategoriSemua() {
-        resepDB db = new resepDB();
-        tampilkanKeLayar(db.getAllResep());
+        kategoriAktif = "Semua";
+        terapkanSemuaFilter();
     }
 
     @FXML
     public void kategoriMakanan() {
-        resepDB db = new resepDB();
-        // Meminta database mencari kategori "Makanan"
-        tampilkanKeLayar(db.filterBerdasarkanKategori("Makanan"));
+        kategoriAktif = "Makanan";
+        terapkanSemuaFilter();
     }
 
     @FXML
     public void kategoriDessert() {
-        resepDB db = new resepDB();
-        tampilkanKeLayar(db.filterBerdasarkanKategori("Dessert"));
+        kategoriAktif = "Dessert";
+        terapkanSemuaFilter();
     }
 
     @FXML
     public void kategoriMinuman() {
-        resepDB db = new resepDB();
-        tampilkanKeLayar(db.filterBerdasarkanKategori("Minuman"));
+        kategoriAktif = "Minuman";
+        terapkanSemuaFilter();
     }
 
-    // Dipanggil saat tombol ⊕ diklik atau enter ditekan
     @FXML
     public void handleTambahBahan() {
         String bahan = inputBahanField.getText().trim();
-        if (!bahan.isEmpty() && !listBahanTerpilih.contains(bahan)) {
+
+        if (!bahan.isEmpty() && !containsIgnoreCase(listBahanTerpilih, bahan)) {
             listBahanTerpilih.add(bahan);
             inputBahanField.clear();
             renderTags();
+            terapkanSemuaFilter();
         }
     }
 
-    // Menggambar ulang tag bahan di kanan layar
     private void renderTags() {
         tagContainer.getChildren().clear();
 
-        for (String bahan : listBahanTerpilih) {
+        List<String> copyList = new ArrayList<>(listBahanTerpilih);
+
+        for (String bahan : copyList) {
             Label tag = new Label(bahan + "  ✕");
-            tag.setStyle("-fx-background-color: #FBE2D1; -fx-text-fill: #555555; -fx-font-size: 11px; -fx-padding: 5 8; -fx-background-radius: 4; -fx-cursor: hand;");
+            tag.setStyle(
+                    "-fx-background-color: #FBE2D1;" +
+                            "-fx-text-fill: #555555;" +
+                            "-fx-font-size: 11px;" +
+                            "-fx-padding: 5 8;" +
+                            "-fx-background-radius: 4;" +
+                            "-fx-cursor: hand;"
+            );
 
             tag.setOnMouseClicked(e -> {
                 listBahanTerpilih.remove(bahan);
                 renderTags();
+                terapkanSemuaFilter();
             });
 
             tagContainer.getChildren().add(tag);
         }
     }
 
-    // Dipanggil saat tombol "Terapkan Filter" diklik
     @FXML
     public void handleTerapkanFilter() {
-        resepDB db = new resepDB();
-        List<Resep> hasilFilter;
-
-        if (listBahanTerpilih.isEmpty()) {
-            hasilFilter = db.getAllResep();
-        } else {
-            hasilFilter = db.filterBerdasarkanBahan(listBahanTerpilih);
-        }
-
-        tampilkanKeLayar(hasilFilter);
+        terapkanSemuaFilter();
     }
 
-    // =========================================================
-    // METHOD HELPER (Menghindari penulisan kode berulang / DRY)
-    // =========================================================
+    private void terapkanSemuaFilter() {
+        String keyword = searchField.getText() == null ? "" : searchField.getText().trim().toLowerCase(Locale.ROOT);
+
+        List<Resep> hasil = masterData.stream()
+                .filter(resep -> cocokKeyword(resep, keyword))
+                .filter(this::cocokKategori)
+                .filter(this::cocokBahan)
+                .toList();
+
+        tampilkanKeLayar(hasil);
+    }
+
+    private boolean cocokKeyword(Resep resep, String keyword) {
+        if (keyword.isEmpty()) return true;
+
+        String judul = resep.getJudul() == null ? "" : resep.getJudul().toLowerCase(Locale.ROOT);
+        return judul.contains(keyword);
+    }
+
+    private boolean cocokKategori(Resep resep) {
+        if ("Semua".equalsIgnoreCase(kategoriAktif)) return true;
+
+        String kategoriResep = resep.getJenisMakanan();
+        if (kategoriResep == null) return false;
+
+        return kategoriResep.equalsIgnoreCase(kategoriAktif);
+    }
+
+    private boolean cocokBahan(Resep resep) {
+        if (listBahanTerpilih.isEmpty()) return true;
+
+        String bahanResep = resep.getBahan() == null ? "" : resep.getBahan().toLowerCase(Locale.ROOT);
+
+        for (String bahan : listBahanTerpilih) {
+            if (!bahanResep.contains(bahan.toLowerCase(Locale.ROOT))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean containsIgnoreCase(List<String> list, String value) {
+        for (String item : list) {
+            if (item.equalsIgnoreCase(value)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void tampilkanKeLayar(List<Resep> daftarResep) {
         resepContainer.getChildren().clear();
+
+        if (daftarResep == null || daftarResep.isEmpty()) {
+            Label kosong = new Label("Tidak ada resep yang cocok.");
+            kosong.setStyle("-fx-text-fill: #888888; -fx-font-size: 14px;");
+            resepContainer.getChildren().add(kosong);
+            return;
+        }
+
         for (Resep resep : daftarResep) {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/felix_71241153/app/haphaphap/itemResep.fxml"));
+                FXMLLoader loader = new FXMLLoader(
+                        getClass().getResource("/com/felix_71241153/app/haphaphap/itemResep.fxml")
+                );
+
                 VBox card = loader.load();
+
                 itemResepController controller = loader.getController();
                 controller.setData(resep);
-                card.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
-                        bukaHalamanDetail(resep, event);
-                    }
-                });
+
+                card.setOnMouseClicked(event -> bukaHalamanDetail(resep, event));
+
                 resepContainer.getChildren().add(card);
+
             } catch (Exception e) {
+                System.out.println("Gagal memuat itemResep.fxml");
                 e.printStackTrace();
             }
         }
@@ -145,15 +203,16 @@ public class homeController {
     @FXML
     public void handleLogout(ActionEvent event) {
         try {
-            // 1. Muat ulang file login.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/felix_71241153/app/haphaphap/login.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/felix_71241153/app/haphaphap/login.fxml")
+            );
+
             Parent root = loader.load();
-            // 2. Ambil "Jendela" (Stage) aplikasi yang sedang aktif saat ini
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            // 3. Ganti isinya dengan halaman Login
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
+            stage.setScene(new Scene(root));
             stage.show();
+
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("❌ Gagal memuat halaman login.");
@@ -162,17 +221,41 @@ public class homeController {
 
     private void bukaHalamanDetail(Resep resep, MouseEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/felix_71241153/app/haphaphap/detail.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/felix_71241153/app/haphaphap/detail.fxml")
+            );
+
             Parent root = loader.load();
+
             detailController controller = loader.getController();
             controller.setResepData(resep);
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
+            stage.setScene(new Scene(root));
             stage.show();
 
         } catch (Exception e) {
             System.out.println("Gagal membuka halaman detail!");
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void handleAddRecipe(ActionEvent event) {
+        try {
+            // 1. Load file addResep.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/felix_71241153/app/haphaphap/add.fxml"));
+            Parent root = loader.load();
+
+            // 2. Ambil Stage (jendela) yang sedang aktif
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // 3. Ganti isinya dengan halaman Add Recipe
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (Exception e) {
+            System.out.println("❌ Gagal membuka halaman Tambah Resep!");
             e.printStackTrace();
         }
     }

@@ -1,42 +1,87 @@
 package util;
 
 import javafx.scene.image.Image;
-import java.net.URL;
+
+import java.io.File;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class imageUtil {
 
-    // Method dinamis untuk mengambil gambar dari nama file
+    private static final Map<String, Image> CACHE = new HashMap<>();
+    private static final String DEFAULT_IMAGE = "default.png";
+
+    // Path yang benar menuju folder images milikmu
+    private static final String RESOURCE_PATH = "/images/";
+
     public static Image getImage(String namaFile) {
-        URL imageUrl = null;
+        String pathFoto = null;
+
+        if (namaFile != null && !namaFile.trim().isEmpty()) {
+            // Bersihkan nama file dari slash kalau user tidak sengaja memasukkannya
+            pathFoto = namaFile.replace("/", "");
+        }
+
+        if (pathFoto == null) {
+            return getDefaultImage();
+        }
+
+        if (CACHE.containsKey(pathFoto)) {
+            return CACHE.get(pathFoto);
+        }
 
         try {
-            // 1. Cek apakah nama file dari DB tidak kosong
-            if (namaFile != null && !namaFile.trim().isEmpty()) {
+            Image img = null;
 
-                // KUNCI UTAMA: Gabungkan "/images/" dengan nama file dari DB.
-                // Ditambah sedikit proteksi: jika user tidak sengaja mengetik garis miring di awal,
-                // kita biarkan saja agar tidak jadi double slash ("//images/").
-                String pathFoto = namaFile.startsWith("/") ? namaFile : "/images/" + namaFile;
+            // 1. Coba ambil pakai ClassLoader (Jalur Resmi JavaFX)
+            String fullPath = RESOURCE_PATH + pathFoto;
+            InputStream is = imageUtil.class.getResourceAsStream(fullPath);
 
-                imageUrl = imageUtil.class.getResource(pathFoto);
+            if (is != null) {
+                img = new Image(is);
+            }
+            // 2. Kalau gagal, coba cari langsung di folder target (Untuk gambar yang BARU SAJA diupload)
+            else {
+                File fileTarget = new File("HapHapHap/target/classes" + fullPath);
+                if(fileTarget.exists()){
+                    img = new Image(fileTarget.toURI().toString());
+                }
             }
 
-            // 2. Jika gambar asli tidak ketemu (salah ketik di DB / file belum masuk folder),
-            // maka otomatis arahkan ke gambar default
-            if (imageUrl == null) {
-                System.out.println("⚠️ Info: Gambar [" + namaFile + "] tidak ketemu.");
-            }
-
-            // 3. Ubah URL menjadi objek Image JavaFX
-            if (imageUrl != null) {
-                return new Image(imageUrl.toExternalForm());
+            if (img != null) {
+                CACHE.put(pathFoto, img);
+                return img;
             } else {
-                System.out.println("❌ ERROR FATAL: File tidak ada di folder resources/images!");
-                return null;
+                System.out.println("⚠️ Gambar tidak ditemukan di folder: " + fullPath);
+                return getDefaultImage();
             }
 
         } catch (Exception e) {
-            System.out.println("❌ Terjadi kesalahan saat memuat gambar: " + e.getMessage());
+            System.out.println("❌ Gagal load gambar: " + e.getMessage());
+            return getDefaultImage();
+        }
+    }
+
+    private static Image getDefaultImage() {
+        if (CACHE.containsKey(DEFAULT_IMAGE)) {
+            return CACHE.get(DEFAULT_IMAGE);
+        }
+
+        try {
+            Image img = null;
+            String fullPath = RESOURCE_PATH + DEFAULT_IMAGE;
+            InputStream is = imageUtil.class.getResourceAsStream(fullPath);
+
+            if (is != null) {
+                img = new Image(is);
+                CACHE.put(DEFAULT_IMAGE, img);
+                return img;
+            } else {
+                System.out.println("❌ CATATAN: File default.png tidak ada di folder " + RESOURCE_PATH);
+                return null;
+            }
+        } catch (Exception e) {
             return null;
         }
     }

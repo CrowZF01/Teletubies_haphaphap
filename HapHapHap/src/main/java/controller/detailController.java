@@ -1,5 +1,5 @@
 package controller;
-
+import util.imageUtil;
 import database.resepDB;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -47,17 +47,21 @@ public class detailController {
         langkahResep.setText(resep.getLangkahPembuatan());
 
         try {
-            if (resep.getFoto() != null && !resep.getFoto().isEmpty()){
-                String imgPath = "/images/" + resep.getFoto();
-                Image img = new Image(getClass().getResourceAsStream(imgPath));
+            Image img = imageUtil.getImage(resep.getFoto());
+
+            if (img != null) {
                 fotoResepDetail.setImage(img);
                 placeholderIcon.setVisible(false);
+            } else {
+                fotoResepDetail.setImage(null);
+                placeholderIcon.setVisible(true);
             }
-        } catch (Exception e){
+
+        } catch (Exception e) {
             System.out.println("Gambar tidak ditemukan");
+            fotoResepDetail.setImage(null);
             placeholderIcon.setVisible(true);
-        }
-        loadBahan(resep.getIdResep());
+        }        loadBahan(resep.getIdResep());
     }
 
     private void loadBahan(int idResep) {

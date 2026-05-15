@@ -34,7 +34,7 @@
 
                 <VBox spacing="15.0">
                     <children>
-                        <Button maxWidth="Infinity" style="-fx-background-color: #A65021; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 10; -fx-cursor: hand;" text="+ Add Recipe" />
+                        <Button maxWidth="Infinity" onAction="#handleAddRecipe" style="-fx-background-color: #A65021; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 10; -fx-cursor: hand;" text="+ Add Recipe" />
                         <Button onAction="#handleLogout" style="-fx-background-color: transparent; -fx-text-fill: #555555; -fx-cursor: hand;" text="🚪 Logout" />
                     </children>
                 </VBox>

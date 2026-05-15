@@ -2,9 +2,10 @@ package controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import model.Resep;
-import util.imageUtil; // Panggil util buatanmu
+import util.imageUtil;
 
 public class itemResepController {
     @FXML private Label judulLabel, kategoriLabel, bahanLabel, waktuLabel;
@@ -12,12 +13,19 @@ public class itemResepController {
 
     public void setData(Resep resep) {
         judulLabel.setText(resep.getJudul());
-        kategoriLabel.setText(resep.getJenisMakanan() != null ? resep.getJenisMakanan().toUpperCase() : "UMUM");
-        bahanLabel.setText(resep.getBahan());
+
+        String kategori = resep.getJenisMakanan();
+        kategoriLabel.setText(kategori != null ? kategori.toUpperCase() : "UMUM");
+
+        bahanLabel.setText(resep.getBahan() != null ? resep.getBahan() : "");
         waktuLabel.setText("⏱ " + resep.getEstimasiWaktu() + "m");
 
-        // WOW! Pemuatan gambar sekarang cuma butuh 1 BARIS!
-        // Semua logika rumit sudah diurus oleh imageUtil
-        fotoResep.setImage(imageUtil.getImage(resep.getFoto()));
+        Image img = imageUtil.getImage(resep.getFoto());
+
+        if (img != null) {
+            fotoResep.setImage(img);
+        } else {
+            fotoResep.setImage(null);
+        }
     }
 }
