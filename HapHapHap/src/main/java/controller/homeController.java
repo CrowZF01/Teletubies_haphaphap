@@ -82,7 +82,6 @@ public class homeController {
             listBahanTerpilih.add(bahan);
             inputBahanField.clear();
             renderTags();
-            terapkanSemuaFilter();
         }
     }
 
@@ -105,7 +104,6 @@ public class homeController {
             tag.setOnMouseClicked(e -> {
                 listBahanTerpilih.remove(bahan);
                 renderTags();
-                terapkanSemuaFilter();
             });
 
             tagContainer.getChildren().add(tag);
