@@ -24,6 +24,9 @@
                         <Region HBox.hgrow="ALWAYS" />
                         <Label fx:id="kategoriLabel" style="-fx-background-color: #FBE2D1; -fx-text-fill: #A65021; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 5 10; -fx-background-radius: 6;" text="KATEGORI" />
                         <Label fx:id="waktuLabel" style="-fx-font-size: 14px; -fx-text-fill: #888888;" text="⏱ 0m" />
+
+                        <Label fx:id="porsiLabel" style="-fx-font-size: 14px; -fx-text-fill: #888888;" text="🍽 0 Porsi" />
+
                         <Label fx:id="pedasLabel" style="-fx-font-size: 14px; -fx-text-fill: #888888;" text="🌶 Level 0" />
                     </children>
                 </HBox>
@@ -46,8 +49,7 @@
                                 <Label fx:id="bahanResep" style="-fx-font-size: 14px; -fx-text-fill: #555555; -fx-line-spacing: 8px;" text="Memuat daftar bahan..." wrapText="true" />
 
                                 <Region VBox.vgrow="ALWAYS" />
-                                <Button maxWidth="Infinity" style="-fx-background-color: #A65021; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 12; -fx-cursor: hand;" text="♡ Simpan Favorit" />
-                            </children>
+                                <Button fx:id="btnFavorit" onAction="#handleToggleFavorit" maxWidth="Infinity" style="-fx-background-color: #A65021; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 12; -fx-cursor: hand;" text="♡ Simpan Favorit" />                            </children>
                         </VBox>
 
                         <VBox spacing="25.0" HBox.hgrow="ALWAYS">

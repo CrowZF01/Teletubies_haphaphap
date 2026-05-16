@@ -225,4 +225,23 @@ public class resepDB {
             }
         }
     }
+
+    // Mengambil daftar resep favorit milik user tertentu
+    public List<Resep> getFavoritByUser(int idUser) {
+        List<Resep> list = new ArrayList<>();
+        // INNER JOIN dengan tabel favorit_user
+        String sql = BASE_QUERY + " INNER JOIN favorit_user fu ON r.id_resep = fu.id_resep WHERE fu.id_user = ? GROUP BY r.id_resep";
+
+        try (Connection conn = databaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idUser);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                list.add(mapToResep(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

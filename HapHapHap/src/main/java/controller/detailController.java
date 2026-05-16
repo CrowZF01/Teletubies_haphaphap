@@ -1,4 +1,5 @@
 package controller;
+import javafx.scene.control.Button;
 import util.imageUtil;
 import database.resepDB;
 import javafx.fxml.FXML;
@@ -38,13 +39,26 @@ public class detailController {
 
     @FXML
     private Label waktuLabel;
+    @FXML private Label porsiLabel;
+
+    @FXML private Button btnFavorit;
+    private Resep resepAktif;
+    private boolean isFavorit = false;
 
     public void setResepData(Resep resep){
+        this.resepAktif = resep;
         judulResep.setText(resep.getJudul());
         waktuLabel.setText("⏱ " + resep.getEstimasiWaktu() + "m");
         pedasLabel.setText("🌶 Level " + resep.getTingkatKepedasan());
         kategoriLabel.setText(resep.getJenisMakanan().toUpperCase());
         langkahResep.setText(resep.getLangkahPembuatan());
+        porsiLabel.setText("🍽 " + resep.getPorsiSajian() + " Porsi");
+
+        if (util.sessionManager.isLogin()) {
+            int idUser = util.sessionManager.getUser().getId();
+            isFavorit = new database.userDB().cekFavorit(idUser, resep.getIdResep());
+            renderTombolFavorit(); // Ubah tampilan tombol sesuai status
+        }
 
         try {
             Image img = imageUtil.getImage(resep.getFoto());
@@ -90,5 +104,40 @@ public class detailController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void renderTombolFavorit() {
+        if (isFavorit) {
+            btnFavorit.setText("♥ Hapus Favorit");
+            // Warna merah kalau sudah favorit
+            btnFavorit.setStyle("-fx-background-color: #E74C3C; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 12; -fx-cursor: hand;");
+        } else {
+            btnFavorit.setText("♡ Simpan Favorit");
+            // Warna cokelat kalau belum
+            btnFavorit.setStyle("-fx-background-color: #A65021; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 12; -fx-cursor: hand;");
+        }
+    }
+
+    @FXML
+    public void handleToggleFavorit() {
+        if (!util.sessionManager.isLogin()) {
+            System.out.println("Harus login dulu!");
+            return;
+        }
+
+        int idUser = util.sessionManager.getUser().getId();
+        database.userDB db = new database.userDB();
+
+        if (isFavorit) {
+            // Kalau sudah favorit, maka hapus
+            db.hapusFavorit(idUser, resepAktif.getIdResep());
+        } else {
+            // Kalau belum, maka tambah
+            db.tambahKeFavorit(idUser, resepAktif.getIdResep());
+        }
+
+        // Balikkan status (Toggle) lalu render ulang tombolnya
+        isFavorit = !isFavorit;
+        renderTombolFavorit();
     }
 }

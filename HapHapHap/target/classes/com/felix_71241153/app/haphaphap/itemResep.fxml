@@ -35,7 +35,7 @@
                 <HBox spacing="15.0">
                     <children>
                         <Label fx:id="waktuLabel" text="⏱ 0m" textFill="#888888" style="-fx-font-size: 11px;" />
-                        <Label text="🍽 4 Porsi" textFill="#888888" style="-fx-font-size: 11px;" />
+                        <Label fx:id="porsiLabel" text="🍽 0 Porsi" textFill="#888888" style="-fx-font-size: 11px;" />
                     </children>
                     <VBox.margin>
                         <Insets top="5.0" />

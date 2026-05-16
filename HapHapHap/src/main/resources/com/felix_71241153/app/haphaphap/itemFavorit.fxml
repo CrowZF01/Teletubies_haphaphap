@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox alignment="CENTER_LEFT" spacing="20.0" style="-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 5);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.itemFavoritController">
+    <padding>
+        <Insets bottom="15.0" left="15.0" right="20.0" top="15.0" />
+    </padding>
+    <children>
+
+        <StackPane prefHeight="140.0" prefWidth="200.0" style="-fx-background-radius: 10; -fx-background-color: #EBEBEB;">
+            <children>
+                <ImageView fx:id="fotoResep" fitHeight="140.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="false" style="-fx-background-radius: 10;" />
+                <Label fx:id="kategoriLabel" style="-fx-background-color: #FBE2D1; -fx-text-fill: #A65021; -fx-font-size: 10px; -fx-font-weight: bold; -fx-padding: 4 8; -fx-background-radius: 4;" text="KATEGORI" StackPane.alignment="TOP_LEFT">
+                    <StackPane.margin>
+                        <Insets left="10.0" top="10.0" />
+                    </StackPane.margin>
+                </Label>
+            </children>
+        </StackPane>
+
+        <VBox spacing="8.0" HBox.hgrow="ALWAYS">
+            <children>
+
+                <HBox alignment="CENTER_LEFT">
+                    <children>
+                        <Label fx:id="judulLabel" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #222222;" text="Nama Resep" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <HBox alignment="CENTER" spacing="15.0">
+                            <children>
+                                <Label onMouseClicked="#handleHapusFavorit" style="-fx-cursor: hand; -fx-font-size: 18px; -fx-text-fill: #555555;" text="🗑" />
+                                <Label style="-fx-font-size: 18px; -fx-text-fill: #A65021;" text="♥" />
+                            </children>
+                        </HBox>
+                    </children>
+                </HBox>
+
+                <HBox spacing="15.0">
+                    <children>
+                        <Label fx:id="waktuLabel" style="-fx-font-size: 12px; -fx-text-fill: #777777;" text="⏱ 0m" />
+                        <Label fx:id="porsiLabel" style="-fx-font-size: 12px; -fx-text-fill: #777777;" text="🍽 0 Porsi" />
+                        <Label fx:id="pedasLabel" style="-fx-font-size: 12px; -fx-text-fill: #777777;" text="🌶" />
+                    </children>
+                </HBox>
+
+                <Label fx:id="deskripsiLabel" style="-fx-font-size: 12px; -fx-text-fill: #555555; -fx-line-spacing: 2px;" text="Deskripsi singkat resep..." wrapText="true" />
+
+                <Region VBox.vgrow="ALWAYS" />
+
+                <Label onMouseClicked="#handleLihatResep" style="-fx-text-fill: #A65021; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-size: 13px;" text="Lihat Resep →" />
+            </children>
+        </VBox>
+
+    </children>
+</HBox>

@@ -8,7 +8,8 @@ import model.Resep;
 import util.imageUtil;
 
 public class itemResepController {
-    @FXML private Label judulLabel, kategoriLabel, bahanLabel, waktuLabel;
+    // 1. Tambahkan porsiLabel di sini
+    @FXML private Label judulLabel, kategoriLabel, bahanLabel, waktuLabel, porsiLabel;
     @FXML private ImageView fotoResep;
 
     public void setData(Resep resep) {
@@ -19,6 +20,9 @@ public class itemResepController {
 
         bahanLabel.setText(resep.getBahan() != null ? resep.getBahan() : "");
         waktuLabel.setText("⏱ " + resep.getEstimasiWaktu() + "m");
+
+        // 2. Set teks porsi secara dinamis!
+        porsiLabel.setText("🍽 " + resep.getPorsiSajian() + " Porsi");
 
         Image img = imageUtil.getImage(resep.getFoto());
 

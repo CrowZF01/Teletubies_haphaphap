@@ -25,7 +25,7 @@
                         <Label onMouseClicked="#kategoriMinuman" style="-fx-cursor: hand; -fx-font-size: 13px; -fx-text-fill: #555555;" text="☕  Minuman" />
 
                         <Region prefHeight="15.0" />
-                        <Label style="-fx-cursor: hand; -fx-font-size: 13px; -fx-text-fill: #555555;" text="♡  Favorit" />
+                        <Label onMouseClicked="#pindahFavorit" style="-fx-cursor: hand; -fx-font-size: 13px; -fx-text-fill: #555555;" text="♡  Favorit" />
                         <Label style="-fx-cursor: hand; -fx-font-size: 13px; -fx-text-fill: #555555;" text="📖  My Recipes" />
                     </children>
                 </VBox>
