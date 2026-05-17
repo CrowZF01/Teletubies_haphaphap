@@ -1,6 +1,7 @@
 package controller;
 
 import database.resepDB;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -56,15 +57,84 @@ public class favoritController {
         }
     }
 
+    // =========================================================
+    // MENU NAVIGASI & FILTER KATEGORI
+    // =========================================================
+
     @FXML
     public void pindahHome(javafx.scene.input.MouseEvent event) {
+        bukaHomeDenganKategori("Semua", event);
+    }
+
+    @FXML
+    public void kategoriSemua(javafx.scene.input.MouseEvent event) {
+        bukaHomeDenganKategori("Semua", event);
+    }
+
+    @FXML
+    public void kategoriMakanan(javafx.scene.input.MouseEvent event) {
+        bukaHomeDenganKategori("Makanan", event);
+    }
+
+    @FXML
+    public void kategoriDessert(javafx.scene.input.MouseEvent event) {
+        bukaHomeDenganKategori("Dessert", event);
+    }
+
+    @FXML
+    public void kategoriMinuman(javafx.scene.input.MouseEvent event) {
+        bukaHomeDenganKategori("Minuman", event);
+    }
+
+    // Fungsi sakti untuk pindah halaman dan langsung tembak filter di Home
+    private void bukaHomeDenganKategori(String kategori, javafx.scene.input.MouseEvent event) {
         try {
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/felix_71241153/app/haphaphap/home.fxml"));
             Parent root = loader.load();
+
+            // Ambil controller dari home.fxml
+            homeController controller = loader.getController();
+
+            // 1. TAMPILKAN SCENE-NYA DULU BIAR ENGINE GRAFISNYA SIAP
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
+
+            // 2. DELAY EKSEKUSI FILTER SAMPAI UI BENAR-BENAR SIAP
+            javafx.application.Platform.runLater(() -> {
+                if (kategori.equals("Makanan")) {
+                    controller.kategoriMakanan();
+                } else if (kategori.equals("Dessert")) {
+                    controller.kategoriDessert();
+                } else if (kategori.equals("Minuman")) {
+                    controller.kategoriMinuman();
+                } else {
+                    controller.kategoriSemua();
+                }
+            });
+
         } catch (Exception e) {
+            System.out.println("Gagal memuat halaman Home");
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void handleAddRecipe(ActionEvent event) {
+        try {
+            // 1. Load file addResep.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/felix_71241153/app/haphaphap/add.fxml"));
+            Parent root = loader.load();
+
+            // 2. Ambil Stage (jendela) yang sedang aktif
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // 3. Ganti isinya dengan halaman Add Recipe
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (Exception e) {
+            System.out.println("❌ Gagal membuka halaman Tambah Resep!");
             e.printStackTrace();
         }
     }
